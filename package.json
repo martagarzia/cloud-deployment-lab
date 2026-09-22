@@ -1,0 +1,29 @@
+{
+  "name": "cloud-deployment-lab",
+  "version": "1.0.0",
+  "description": "A hands-on project focused on deploying and managing a Node.js application on an Ubuntu server.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martagarzia/cloud-deployment-lab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/martagarzia/cloud-deployment-lab/issues"
+  },
+  "homepage": "https://github.com/martagarzia/cloud-deployment-lab#readme",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.2.1"
+  }
+}
