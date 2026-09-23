@@ -367,3 +367,256 @@ The PUT endpoint also returns:
 when the requested task does not exist.
 
 These cases were tested locally using PowerShell.
+
+## 30. Prepare the Ubuntu Server
+
+Create an Ubuntu Server virtual machine using VirtualBox.
+
+The VM was configured with:
+
+- 4096 MB RAM
+- 2 CPU cores
+- 25 GB virtual disk
+- Ubuntu Server 26.04 LTS
+- Italian keyboard layout
+- No proxy
+- LVM enabled
+- Disk encryption disabled
+- OpenSSH server enabled
+
+Create a Linux user for administration and deployment.
+
+The server was configured with the hostname:
+
+`cloud-deployment-lab`
+
+The Ubuntu installation was completed successfully.
+
+## 31. Configure SSH access
+
+Configure VirtualBox port forwarding to allow SSH access from the Windows host.
+
+The following port forwarding rule was created:
+
+- Host IP: `127.0.0.1`
+- Host port: `2222`
+- Guest port: `22`
+- Protocol: `TCP`
+
+SSH access was verified from Windows with:
+
+`ssh marta@127.0.0.1 -p 2222`
+
+The connection successfully opened a shell on the Ubuntu Server.
+
+## 32. Configure the Ubuntu firewall
+
+Check the UFW firewall status:
+
+`sudo ufw status`
+
+The firewall was initially inactive.
+
+Allow SSH connections before enabling the firewall:
+
+`sudo ufw allow 22/tcp`
+
+Enable UFW:
+
+`sudo ufw enable`
+
+Verify the active rules:
+
+`sudo ufw status`
+
+SSH on port `22/tcp` was confirmed as allowed.
+
+## 33. Install Node.js on Ubuntu
+
+Update the Ubuntu package list:
+
+`sudo apt update`
+
+Install Node.js and npm:
+
+`sudo apt install nodejs npm`
+
+Verify the installation:
+
+`node --version`
+`npm --version`
+
+The server was configured with:
+
+- Node.js `v22.22.1`
+- npm `9.2.0`
+
+## 34. Install SQLite on Ubuntu
+
+Install the SQLite command-line tools:
+
+`sudo apt install sqlite3`
+
+Verify the installation:
+
+`sqlite3 --version`
+
+SQLite `3.46.1` was installed successfully.
+
+The `sqlite3` command-line tool is used to inspect and manage SQLite databases directly from the Ubuntu server.
+
+The Node.js application continues to use `better-sqlite3` to communicate with SQLite.
+
+## 35. Clone the repository on Ubuntu
+
+Verify that Git is installed:
+
+`git --version`
+
+Clone the repository using SSH authentication:
+
+`git clone git@github.com:martagarzia/cloud-deployment-lab.git`
+
+An ED25519 SSH key was generated on the Ubuntu server and added to the GitHub account.
+
+GitHub SSH authentication was verified with:
+
+`ssh -T git@github.com`
+
+The repository was then successfully cloned to:
+
+`/home/marta/cloud-deployment-lab`
+
+## 36. Install production dependencies
+
+Move into the project directory:
+
+`cd ~/cloud-deployment-lab`
+
+Install the dependencies defined in `package-lock.json`:
+
+`npm ci`
+
+The installation completed successfully and reported no vulnerabilities.
+
+`npm ci` was used to install the exact dependency versions recorded in the lock file.
+
+## 37. Configure the production database
+
+The SQLite database file is not stored in Git because it is excluded by `.gitignore`.
+
+After starting the application on Ubuntu, the database was automatically created at:
+
+`data/database.sqlite`
+
+The database file was verified with:
+
+`ls -lh ~/cloud-deployment-lab/data/database.sqlite`
+
+The production database was created successfully.
+
+## 38. Run the application on Ubuntu
+
+Start the application temporarily with:
+
+`npm start`
+
+The application reported:
+
+`Server running on http://localhost:3000`
+
+The application was verified locally from the Ubuntu server with:
+
+`curl http://localhost:3000/`
+
+The expected response was:
+
+`Cloud Deployment Lab is running!`
+
+## 39. Create the systemd service
+
+Create the systemd service file:
+
+`/etc/systemd/system/cloud-deployment-lab.service`
+
+The service runs the Node.js application as the `marta` user from:
+
+`/home/marta/cloud-deployment-lab`
+
+The service starts the application with:
+
+`/usr/bin/node src/server.js`
+
+The service is configured to restart automatically if the application stops.
+
+Reload systemd after creating or modifying the service:
+
+`sudo systemctl daemon-reload`
+
+Enable the service at system startup:
+
+`sudo systemctl enable cloud-deployment-lab.service`
+
+Start the service:
+
+`sudo systemctl start cloud-deployment-lab.service`
+
+Check the service status:
+
+`sudo systemctl status cloud-deployment-lab.service`
+
+The service was successfully verified with:
+
+`Active: active (running)`
+
+The application is now managed by systemd and starts automatically when the Ubuntu server boots.
+
+## 40. Configure Nginx
+
+Install Nginx on the Ubuntu server:
+
+`sudo apt install nginx`
+
+Verify that Nginx is running:
+
+`sudo systemctl status nginx`
+
+Nginx was successfully installed and verified as `active (running)`.
+
+## 40.1 Configure Nginx as a reverse proxy
+
+Create the application configuration:
+
+`/etc/nginx/sites-available/cloud-deployment-lab`
+
+The configuration listens on port `80` and forwards incoming HTTP requests to the Node.js application running on port `3000`.
+
+The reverse proxy forwards requests to:
+
+`http://127.0.0.1:3000`
+
+Enable the application configuration:
+
+`sudo ln -s /etc/nginx/sites-available/cloud-deployment-lab /etc/nginx/sites-enabled/cloud-deployment-lab`
+
+Remove the default Nginx site to avoid a conflicting `server_name` configuration:
+
+`sudo rm /etc/nginx/sites-enabled/default`
+
+Test the Nginx configuration:
+
+`sudo nginx -t`
+
+The configuration test completed successfully.
+
+Reload Nginx to apply the new configuration:
+
+`sudo systemctl reload nginx`
+
+Verify the reverse proxy locally:
+
+`curl http://localhost/`
+
+The request was successfully forwarded to the Node.js application and returned:
+
+`Cloud Deployment Lab is running!`
