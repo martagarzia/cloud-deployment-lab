@@ -10,3 +10,15 @@ const Database = require("better-sqlite3");
 
 // Create or open the SQLite database file inside the data directory.
 const db = new Database("data/database.sqlite");
+
+// Create the tasks table if it does not already exist.
+db.exec(`
+  CREATE TABLE IF NOT EXISTS tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    completed INTEGER NOT NULL DEFAULT 0
+  )
+`);
+
+// Export the database connection so that other files can use it.
+module.exports = db;
