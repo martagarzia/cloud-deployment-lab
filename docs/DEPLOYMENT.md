@@ -368,58 +368,129 @@ when the requested task does not exist.
 
 These cases were tested locally using PowerShell.
 
-## 30. Prepare the Ubuntu Server
+## 30. Create the Hetzner VPS
 
-Create an Ubuntu Server virtual machine using VirtualBox.
+Create a cloud server on Hetzner for the production deployment.
 
-The VM was configured with:
+The server was configured with:
 
-- 4096 MB RAM
-- 2 CPU cores
-- 25 GB virtual disk
-- Ubuntu Server 26.04 LTS
-- Italian keyboard layout
-- No proxy
-- LVM enabled
-- Disk encryption disabled
-- OpenSSH server enabled
+- Regular Performance
+- Shared Resources
+- x86 (AMD)
+- CPX12
+- 1 vCPU
+- 2 GB RAM
+- 40 GB SSD
+- Falkenstein location
+- Ubuntu 26.04
+- Public IPv4
+- Public IPv6
+- No private network
+- No volume
+- No Hetzner backups
+- No placement group
+- No labels
+- No cloud config
 
-Create a Linux user for administration and deployment.
-
-The server was configured with the hostname:
+The server was named:
 
 `cloud-deployment-lab`
 
-The Ubuntu installation was completed successfully.
+The public IPv4 address was:
 
-## 31. Configure SSH access
+`188.245.199.140`
 
-Configure VirtualBox port forwarding to allow SSH access from the Windows host.
+The server was created with an existing Windows SSH public key.
 
-The following port forwarding rule was created:
+## 31. Connect to the Hetzner server
 
-- Host IP: `127.0.0.1`
-- Host port: `2222`
-- Guest port: `22`
-- Protocol: `TCP`
+Connect to the server from Windows using SSH:
 
-SSH access was verified from Windows with:
+`ssh root@188.245.199.140`
 
-`ssh marta@127.0.0.1 -p 2222`
+Verify the Ubuntu version:
 
-The connection successfully opened a shell on the Ubuntu Server.
+`lsb_release -a`
 
-## 32. Configure the Ubuntu firewall
+The server was running:
+
+- Ubuntu 26.04.1 LTS
+- Release `26.04`
+- Codename `resolute`
+
+Update the system:
+
+`sudo apt update`
+
+Upgrade installed packages:
+
+`sudo apt upgrade -y`
+
+The server was then rebooted and the SSH connection was successfully restored.
+
+## 32. Create the deployment user
+
+Create the `marta` Linux user:
+
+`adduser marta`
+
+Add the user to the `sudo` group:
+
+`usermod -aG sudo marta`
+
+Verify the user's groups:
+
+`groups marta`
+
+The user was confirmed as a member of:
+
+`marta sudo users`
+
+## 33. Configure SSH access for the deployment user
+
+Create the SSH directory for `marta`:
+
+`mkdir -p /home/marta/.ssh`
+
+Copy the existing authorized SSH key:
+
+`cp /root/.ssh/authorized_keys /home/marta/.ssh/authorized_keys`
+
+Set the correct ownership:
+
+`chown -R marta:marta /home/marta/.ssh`
+
+Set the SSH directory permissions:
+
+`chmod 700 /home/marta/.ssh`
+
+Set the authorized keys file permissions:
+
+`chmod 600 /home/marta/.ssh/authorized_keys`
+
+Verify SSH access from Windows:
+
+`ssh marta@188.245.199.140`
+
+The connection was successfully established using the `marta` user.
+
+## 34. Configure the Ubuntu firewall
 
 Check the UFW firewall status:
 
 `sudo ufw status`
 
-The firewall was initially inactive.
-
-Allow SSH connections before enabling the firewall:
+Allow SSH connections:
 
 `sudo ufw allow 22/tcp`
+
+Allow HTTP connections for Nginx:
+
+`sudo ufw allow 80/tcp`
+
+Allow HTTPS connections for Nginx:
+
+`sudo ufw allow 443/tcp`
 
 Enable UFW:
 
@@ -429,9 +500,15 @@ Verify the active rules:
 
 `sudo ufw status`
 
-SSH on port `22/tcp` was confirmed as allowed.
+The firewall was successfully enabled with the following ports allowed:
 
-## 33. Install Node.js on Ubuntu
+- `22/tcp` — SSH
+- `80/tcp` — HTTP
+- `443/tcp` — HTTPS
+
+The rules were enabled for both IPv4 and IPv6.
+
+## 35. Install Node.js on the Hetzner server
 
 Update the Ubuntu package list:
 
@@ -451,43 +528,49 @@ The server was configured with:
 - Node.js `v22.22.1`
 - npm `9.2.0`
 
-## 34. Install SQLite on Ubuntu
+## 36. Install SQLite on the Hetzner server
 
 Install the SQLite command-line tools:
 
 `sudo apt install sqlite3`
 
-Verify the installation:
-
-`sqlite3 --version`
-
-SQLite `3.46.1` was installed successfully.
-
 The `sqlite3` command-line tool is used to inspect and manage SQLite databases directly from the Ubuntu server.
 
 The Node.js application continues to use `better-sqlite3` to communicate with SQLite.
 
-## 35. Clone the repository on Ubuntu
+## 37. Configure GitHub SSH authentication
 
-Verify that Git is installed:
+Check the SSH directory for the `marta` user:
 
-`git --version`
+`ls -la ~/.ssh`
 
-Clone the repository using SSH authentication:
+A GitHub-specific SSH key was not present, so a new ED25519 key was generated:
 
-`git clone git@github.com:martagarzia/cloud-deployment-lab.git`
+`ssh-keygen -t ed25519 -C "marta@cloud-deployment-lab"`
 
-An ED25519 SSH key was generated on the Ubuntu server and added to the GitHub account.
+The public key was displayed with:
+
+`cat ~/.ssh/id_ed25519.pub`
+
+The public key was added to the GitHub account as an authentication key with the title:
+
+`cloud-deployment-lab Hetzner VPS`
 
 GitHub SSH authentication was verified with:
 
 `ssh -T git@github.com`
 
-The repository was then successfully cloned to:
+## 38. Clone the repository on the Hetzner server
+
+Clone the repository using SSH authentication:
+
+`git clone git@github.com:martagarzia/cloud-deployment-lab.git`
+
+The repository was successfully cloned to:
 
 `/home/marta/cloud-deployment-lab`
 
-## 36. Install production dependencies
+## 39. Install production dependencies
 
 Move into the project directory:
 
@@ -497,63 +580,59 @@ Install the dependencies defined in `package-lock.json`:
 
 `npm ci`
 
-The installation completed successfully and reported no vulnerabilities.
+`npm ci` installs the exact dependency versions recorded in the lock file and is suitable for reproducible deployments.
 
-`npm ci` was used to install the exact dependency versions recorded in the lock file.
+The production dependencies were installed successfully.
 
-## 37. Configure the production database
+## 40. Configure the production database
 
 The SQLite database file is not stored in Git because it is excluded by `.gitignore`.
 
-After starting the application on Ubuntu, the database was automatically created at:
+The production database will be created automatically when the application starts.
+
+The database will be created at:
 
 `data/database.sqlite`
 
-The database file was verified with:
-
-`ls -lh ~/cloud-deployment-lab/data/database.sqlite`
-
-The production database was created successfully.
-
-## 38. Run the application on Ubuntu
+## 41. Run the application on the Hetzner server
 
 Start the application temporarily with:
 
 `npm start`
 
-The application reported:
+The application should report:
 
 `Server running on http://localhost:3000`
 
-The application was verified locally from the Ubuntu server with:
+Verify the application locally from the server with:
 
 `curl http://localhost:3000/`
 
-The expected response was:
+The expected response is:
 
 `Cloud Deployment Lab is running!`
 
-## 39. Create the systemd service
+## 42. Create the systemd service
 
 Create the systemd service file:
 
 `/etc/systemd/system/cloud-deployment-lab.service`
 
-The service runs the Node.js application as the `marta` user from:
+Configure the service to run the Node.js application as the `marta` user from:
 
 `/home/marta/cloud-deployment-lab`
 
-The service starts the application with:
+The application should be started with:
 
 `/usr/bin/node src/server.js`
 
-The service is configured to restart automatically if the application stops.
+The service should restart automatically if the application stops.
 
-Reload systemd after creating or modifying the service:
+Reload systemd:
 
 `sudo systemctl daemon-reload`
 
-Enable the service at system startup:
+Enable the service:
 
 `sudo systemctl enable cloud-deployment-lab.service`
 
@@ -561,19 +640,13 @@ Start the service:
 
 `sudo systemctl start cloud-deployment-lab.service`
 
-Check the service status:
+Verify the service:
 
 `sudo systemctl status cloud-deployment-lab.service`
 
-The service was successfully verified with:
+## 43. Configure Nginx
 
-`Active: active (running)`
-
-The application is now managed by systemd and starts automatically when the Ubuntu server boots.
-
-## 40. Configure Nginx
-
-Install Nginx on the Ubuntu server:
+Install Nginx:
 
 `sudo apt install nginx`
 
@@ -581,17 +654,13 @@ Verify that Nginx is running:
 
 `sudo systemctl status nginx`
 
-Nginx was successfully installed and verified as `active (running)`.
-
-## 40.1 Configure Nginx as a reverse proxy
+## 44. Configure Nginx as a reverse proxy
 
 Create the application configuration:
 
 `/etc/nginx/sites-available/cloud-deployment-lab`
 
-The configuration listens on port `80` and forwards incoming HTTP requests to the Node.js application running on port `3000`.
-
-The reverse proxy forwards requests to:
+Configure Nginx to listen on port `80` and forward requests to:
 
 `http://127.0.0.1:3000`
 
@@ -599,7 +668,7 @@ Enable the application configuration:
 
 `sudo ln -s /etc/nginx/sites-available/cloud-deployment-lab /etc/nginx/sites-enabled/cloud-deployment-lab`
 
-Remove the default Nginx site to avoid a conflicting `server_name` configuration:
+Remove the default Nginx site:
 
 `sudo rm /etc/nginx/sites-enabled/default`
 
@@ -607,16 +676,506 @@ Test the Nginx configuration:
 
 `sudo nginx -t`
 
-The configuration test completed successfully.
-
-Reload Nginx to apply the new configuration:
+Reload Nginx:
 
 `sudo systemctl reload nginx`
 
-Verify the reverse proxy locally:
+Verify the reverse proxy:
 
 `curl http://localhost/`
 
-The request was successfully forwarded to the Node.js application and returned:
+## 45. Create the Hetzner VPS
 
-`Cloud Deployment Lab is running!`
+Create a cloud server on Hetzner for the production deployment.
+
+The server was configured with:
+
+- Regular Performance
+- Shared Resources
+- x86 (AMD)
+- CPX12
+- 1 vCPU
+- 2 GB RAM
+- 40 GB SSD
+- Falkenstein location
+- Ubuntu 26.04
+- Public IPv4
+- Public IPv6
+- No private network
+- No volume
+- No Hetzner backups
+- No placement group
+- No labels
+- No cloud config
+
+The server was named:
+
+`cloud-deployment-lab`
+
+The public IPv4 address was:
+
+`188.245.199.140`
+
+A Windows SSH public key was added during server creation.
+
+## 46. Connect to the Hetzner server
+
+Connect to the server from Windows using SSH:
+
+`ssh root@188.245.199.140`
+
+Verify the Ubuntu version:
+
+`lsb_release -a`
+
+The server was running:
+
+- Ubuntu 26.04.1 LTS
+- Release `26.04`
+- Codename `resolute`
+
+Update the system:
+
+`sudo apt update`
+
+Upgrade installed packages:
+
+`sudo apt upgrade -y`
+
+The server was rebooted after the system upgrade and the SSH connection was successfully restored.
+
+## 47. Create the deployment user
+
+Create the `marta` Linux user:
+
+`adduser marta`
+
+Add the user to the `sudo` group:
+
+`usermod -aG sudo marta`
+
+Verify the user's groups:
+
+`groups marta`
+
+The user was confirmed as a member of:
+
+`marta sudo users`
+
+## 48. Configure SSH access for the deployment user
+
+Create the SSH directory for `marta`:
+
+`mkdir -p /home/marta/.ssh`
+
+Copy the existing authorized SSH key:
+
+`cp /root/.ssh/authorized_keys /home/marta/.ssh/authorized_keys`
+
+Set the correct ownership:
+
+`chown -R marta:marta /home/marta/.ssh`
+
+Set the SSH directory permissions:
+
+`chmod 700 /home/marta/.ssh`
+
+Set the authorized keys file permissions:
+
+`chmod 600 /home/marta/.ssh/authorized_keys`
+
+Verify SSH access from Windows:
+
+`ssh marta@188.245.199.140`
+
+The connection was successfully established using the `marta` user.
+
+## 49. Configure the Ubuntu firewall
+
+Check the UFW firewall status:
+
+`sudo ufw status`
+
+Allow SSH connections:
+
+`sudo ufw allow 22/tcp`
+
+Allow HTTP connections:
+
+`sudo ufw allow 80/tcp`
+
+Allow HTTPS connections:
+
+`sudo ufw allow 443/tcp`
+
+Enable UFW:
+
+`sudo ufw enable`
+
+Verify the active rules:
+
+`sudo ufw status`
+
+The firewall was successfully enabled with the following ports allowed:
+
+- `22/tcp` — SSH
+- `80/tcp` — HTTP
+- `443/tcp` — HTTPS
+
+The rules were enabled for both IPv4 and IPv6.
+
+## 50. Install Node.js on the Hetzner server
+
+Update the Ubuntu package list:
+
+`sudo apt update`
+
+Install Node.js and npm:
+
+`sudo apt install nodejs npm`
+
+Verify the installation:
+
+`node --version`
+`npm --version`
+
+The server was configured with:
+
+- Node.js `v22.22.1`
+- npm `9.2.0`
+
+## 51. Install SQLite on the Hetzner server
+
+Install the SQLite command-line tools:
+
+`sudo apt install sqlite3`
+
+SQLite was installed successfully.
+
+The `sqlite3` command-line tool can be used to inspect and manage SQLite databases directly from the Ubuntu server.
+
+The Node.js application uses `better-sqlite3` to communicate with SQLite.
+
+## 52. Configure GitHub SSH authentication
+
+Check the SSH directory for the `marta` user:
+
+`ls -la ~/.ssh`
+
+A GitHub-specific SSH key was not present, so a new ED25519 key was generated:
+
+`ssh-keygen -t ed25519 -C "marta@cloud-deployment-lab"`
+
+Display the public key:
+
+`cat ~/.ssh/id_ed25519.pub`
+
+The public key was added to the GitHub account as an authentication key with the title:
+
+`cloud-deployment-lab Hetzner VPS`
+
+Verify GitHub SSH authentication:
+
+`ssh -T git@github.com`
+
+GitHub authentication was successfully verified.
+
+## 53. Clone the repository on the Hetzner server
+
+Clone the repository using SSH authentication:
+
+`git clone git@github.com:martagarzia/cloud-deployment-lab.git`
+
+The repository was successfully cloned to:
+
+`/home/marta/cloud-deployment-lab`
+
+## 54. Install production dependencies
+
+Move into the project directory:
+
+`cd ~/cloud-deployment-lab`
+
+Install the dependencies defined in `package-lock.json`:
+
+`npm ci`
+
+`npm ci` installs the exact dependency versions recorded in the lock file and is suitable for reproducible deployments.
+
+The production dependencies were installed successfully.
+
+## 55. Register the production domain
+
+Register the domain used for the production deployment:
+
+`lemiericette.de`
+
+The domain was registered through Hetzner.
+
+## 56. Transfer the DNS zone to the production project
+
+The DNS zone for `lemiericette.de` was initially associated with the `konsoleH` project.
+
+Transfer the DNS zone to the `Default` Hetzner Cloud project so that the domain and the production VPS are managed in the same project.
+
+The DNS zone contained existing records, which were preserved during the transfer.
+
+## 57. Configure the domain IPv4 records
+
+Update the A records for the domain to point to the Hetzner VPS.
+
+Configure:
+
+- `@` → `188.245.199.140`
+- `www` → `188.245.199.140`
+
+The remaining DNS records were left unchanged.
+
+Verify the DNS configuration from a client machine with:
+
+`nslookup lemiericette.de`
+
+The domain resolved to the VPS IPv4 address.
+
+## 58. Configure the domain IPv6 records
+
+Update the AAAA records to point to the IPv6 address configured on the Hetzner VPS.
+
+Configure:
+
+- `@` → `2a01:4f8:c012:6e1b::1`
+- `www` → `2a01:4f8:c012:6e1b::1`
+
+Verify the IPv6 address on the server with:
+
+`ip -6 addr`
+
+The address was confirmed on the `eth0` network interface.
+
+## 59. Configure Nginx for the domain
+
+Update the Nginx server configuration:
+
+`/etc/nginx/sites-available/cloud-deployment-lab`
+
+Configure Nginx to accept:
+
+- `lemiericette.de`
+- `www.lemiericette.de`
+
+Nginx continues to forward requests to the Node.js application running on:
+
+`http://127.0.0.1:3000`
+
+Test the configuration with:
+
+`sudo nginx -t`
+
+Reload Nginx with:
+
+`sudo systemctl reload nginx`
+
+## 60. Install Certbot
+
+Install Certbot on the Ubuntu server:
+
+`sudo snap install --classic certbot`
+
+Verify the installation:
+
+`certbot --version`
+
+The installed version was:
+
+`certbot 5.8.0`
+
+## 61. Request the HTTPS certificate
+
+Request a Let's Encrypt certificate for the production domain:
+
+`sudo certbot --nginx -d lemiericette.de -d www.lemiericette.de`
+
+Certbot successfully issued the certificate.
+
+The certificate files were created under:
+
+`/etc/letsencrypt/live/lemiericette.de/`
+
+The certificate is configured for automatic renewal by Certbot.
+
+## 62. Configure the HTTPS certificate in Nginx
+
+Certbot initially issued the certificate but could not automatically install it because the Nginx configuration used the VPS IP address as the `server_name`.
+
+The Nginx configuration was updated to use:
+
+`server_name lemiericette.de www.lemiericette.de;`
+
+Test the Nginx configuration:
+
+`sudo nginx -t`
+
+Reload Nginx:
+
+`sudo systemctl reload nginx`
+
+Install the existing certificate:
+
+`sudo certbot install --cert-name lemiericette.de`
+
+The certificate was successfully deployed to the Nginx configuration.
+
+## 63. Configure HTTP to HTTPS redirection
+
+Configure Nginx to redirect HTTP requests to HTTPS:
+
+`http://lemiericette.de`
+
+→
+
+`https://lemiericette.de`
+
+The redirect was configured with an HTTP `301 Moved Permanently` response.
+
+Verify the redirect from the server:
+
+`curl -I http://lemiericette.de`
+
+The expected response is:
+
+`HTTP/1.1 301 Moved Permanently`
+
+with:
+
+`Location: https://lemiericette.de/`
+
+## 64. Verify HTTPS
+
+Verify that the application is accessible through HTTPS:
+
+`curl -I https://lemiericette.de`
+
+The server returned:
+
+`HTTP/1.1 200 OK`
+
+This confirmed that:
+
+- DNS resolves to the production VPS
+- Nginx accepts HTTPS requests
+- The Let's Encrypt certificate is installed
+- Nginx forwards HTTPS requests to the Node.js application
+- The application responds successfully
+
+## 65. Verify external access
+
+The production website was tested from an external network:
+
+`https://lemiericette.de`
+
+The website was successfully accessible.
+
+The original network used for testing blocked the domain through FortiGuard because it was classified as a `Newly Observed Domain`. The same domain was accessible from another network, confirming that the block was caused by the network security filter rather than the server or HTTPS configuration.
+
+## 66. Verify automatic HTTPS certificate renewal
+
+Test the Let's Encrypt automatic renewal process without actually renewing the certificate:
+
+`sudo certbot renew --dry-run`
+
+The renewal simulation completed successfully.
+
+This confirms that the Let's Encrypt certificate for:
+
+- `lemiericette.de`
+- `www.lemiericette.de`
+
+can be renewed automatically.
+
+## 67. Create a production database backup
+
+Create a directory for production database backups:
+
+`mkdir -p ~/backups`
+
+Create a timestamped backup of the production SQLite database:
+
+`cp ~/cloud-deployment-lab/data/database.sqlite ~/backups/database-$(date +%Y-%m-%d-%H%M%S).sqlite`
+
+Verify the backup:
+
+`ls -lh ~/backups`
+
+The first production backup was successfully created.
+
+## 68. Verify database backup integrity
+
+Verify that the backup can be opened and checked by SQLite:
+
+`sqlite3 ~/backups/database-2026-09-24-120748.sqlite "PRAGMA integrity_check;"`
+
+The command returned:
+
+`ok`
+
+This confirms that the backup database passed the SQLite integrity check.
+
+## 69. Automate database backups
+
+Verify that the `cron` service is installed and running:
+
+`sudo systemctl status cron`
+
+The service was already active on the Ubuntu server.
+
+Create the `marta` user's crontab:
+
+`crontab -e`
+
+Add a daily backup job:
+
+`0 2 * * * cp /home/marta/cloud-deployment-lab/data/database.sqlite /home/marta/backups/database-$(date +\%Y-\%m-\%d-\%H\%M\%S).sqlite`
+
+Verify the configured cron jobs:
+
+`crontab -l`
+
+The backup job was configured to run every day at 02:00.
+
+The backup command was also executed manually to verify that it works correctly.
+
+Two database backup files were successfully created in:
+
+`/home/marta/backups`
+
+## 70. Configure backup retention
+
+Update the daily backup cron job to automatically remove database backups older than 7 days.
+
+The configured cron job is:
+
+`0 2 * * * cp /home/marta/cloud-deployment-lab/data/database.sqlite /home/marta/backups/database-$(date +\%Y-\%m-\%d-\%H\%M\%S).sqlite && find /home/marta/backups -name 'database-*.sqlite' -mtime +7 -delete`
+
+Verify the configuration with:
+
+`crontab -l`
+
+The backup process now:
+
+- Creates a daily SQLite database backup at 02:00.
+- Stores backups in `/home/marta/backups`.
+- Removes backups older than 7 days.
+
+## 71. Verify the production health endpoint
+
+Verify that the production application responds successfully through Nginx and HTTPS:
+
+`curl -I https://lemiericette.de`
+
+The server returned:
+
+`HTTP/1.1 200 OK`
+
+This confirms that the production request path is working:
+
+`HTTPS → Nginx → Node.js → Express`

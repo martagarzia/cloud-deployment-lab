@@ -18,6 +18,12 @@ const app = express();
 // Enable Express to read JSON data sent in HTTP request bodies.
 app.use(express.json());
 
+// Define a health check endpoint for monitoring the application.
+app.get("/health", (req, res) => {
+  // Return a successful response when the application is running.
+  res.status(200).json({ status: "ok" });
+});
+
 // Define the network port where our server will listen for incoming HTTP requests.
 const PORT = 3000;
 
@@ -73,8 +79,10 @@ app.post("/tasks", (req, res) => {
   const task = {
     // Return the database-generated task ID.
     id: result.lastInsertRowid,
+
     // Return the task title.
     title: title,
+
     // Return the default incomplete state.
     completed: 0
   };
@@ -141,7 +149,7 @@ app.delete("/tasks/:id", (req, res) => {
   res.json({ message: "Task deleted successfully" });
 });
 
-// Start the web server and make it listen for incoming requests on port 3000.
+// Start the web server and make it listen for incoming HTTP requests on port 3000.
 // The function inside listen() runs once the server has successfully started.
 app.listen(PORT, () => {
   // Print a message in the terminal so we know that the server is running and where we can access it.
