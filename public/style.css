@@ -1,0 +1,65 @@
+/* Define the basic style for the whole page. */
+body {
+    /* Use a simple sans-serif font. */
+    font-family: Arial, sans-serif;
+  
+    /* Use a white background. */
+    background-color: white;
+  
+    /* Use black text. */
+    color: black;
+  
+    /* Remove the default browser margin. */
+    margin: 0;
+  }
+  
+  /* Style the main content area. */
+  main {
+    /* Limit the width of the content. */
+    max-width: 600px;
+  
+    /* Center the content horizontally. */
+    margin: 80px auto;
+  
+    /* Add space inside the content area. */
+    padding: 20px;
+  }
+  
+  /* Style the main title. */
+  h1 {
+    /* Add space below the title. */
+    margin-bottom: 40px;
+  }
+  
+  /* Remove the default list indentation. */
+  ul {
+    /* Remove the default left padding. */
+    padding: 0;
+  
+    /* Remove the default list markers. */
+    list-style: none;
+  }
+  
+  /* Add space between the recipe links. */
+  li {
+    /* Add space below each recipe. */
+    margin-bottom: 20px;
+  }
+  
+  /* Style the recipe links. */
+  a {
+    /* Use black text for the links. */
+    color: black;
+  
+    /* Remove the default underline. */
+    text-decoration: none;
+  
+    /* Make the links slightly larger. */
+    font-size: 20px;
+  }
+  
+  /* Add an underline when the mouse is over a link. */
+  a:hover {
+    /* Show an underline on hover. */
+    text-decoration: underline;
+  }

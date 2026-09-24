@@ -18,6 +18,9 @@ const app = express();
 // Enable Express to read JSON data sent in HTTP request bodies.
 app.use(express.json());
 
+// Serve the frontend files from the public directory.
+app.use(express.static("public"));
+
 // Define a health check endpoint for monitoring the application.
 app.get("/health", (req, res) => {
   // Return a successful response when the application is running.
