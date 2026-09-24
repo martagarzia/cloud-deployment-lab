@@ -1236,3 +1236,28 @@ Run the deployment script with:
 `~/cloud-deployment-lab/deploy.sh`
 
 The deployment completed successfully and `npm ci` reported zero vulnerabilities.
+
+## 74. Test the automated deployment
+
+Update the application source code locally and push the change to GitHub.
+
+Run the deployment script on the production server:
+
+`~/cloud-deployment-lab/deploy.sh`
+
+The script successfully:
+
+- Pulled the latest commit from GitHub.
+- Installed the production dependencies with `npm ci`.
+- Restarted the systemd service.
+- Verified that the deployment completed successfully.
+
+The deployed application was then verified through HTTPS:
+
+`curl https://lemiericette.de`
+
+The updated application response was returned successfully:
+
+`Cloud Deployment Lab is running on Hetzner!`
+
+This confirms that the automated deployment process successfully transfers application changes from GitHub to the production VPS.
