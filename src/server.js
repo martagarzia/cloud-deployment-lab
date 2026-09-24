@@ -31,7 +31,7 @@ const PORT = 3000;
 // "/" represents the root URL of our application, for example: http://localhost:3000/
 app.get("/", (req, res) => {
   // Send a text response back to the client that made the request.
-  res.send("Cloud Deployment Lab is running!");
+  res.send("Cloud Deployment Lab is running on Hetzner!");
 });
 
 // Define a GET endpoint to retrieve all tasks from the database.

@@ -1179,3 +1179,60 @@ The server returned:
 This confirms that the production request path is working:
 
 `HTTPS → Nginx → Node.js → Express`
+
+## 72. Add an application health check
+
+Add a dedicated health check endpoint to `src/server.js`:
+
+`GET /health`
+
+The endpoint returns:
+
+`{"status":"ok"}`
+
+Deploy the updated application:
+
+`git pull origin main`
+
+Restart the systemd service:
+
+`sudo systemctl restart cloud-deployment-lab.service`
+
+Verify the application locally:
+
+`curl http://localhost:3000/health`
+
+Verify the endpoint through the public HTTPS endpoint:
+
+`curl https://lemiericette.de/health`
+
+Both checks returned:
+
+`{"status":"ok"}`
+
+This confirms that the application is running correctly both locally and through Nginx and HTTPS.
+
+## 73. Create the deployment automation script
+
+Create the deployment script:
+
+`~/cloud-deployment-lab/deploy.sh`
+
+The script performs the following steps:
+
+1. Moves into the project directory.
+2. Pulls the latest changes from GitHub.
+3. Installs the production dependencies with `npm ci`.
+4. Restarts the `cloud-deployment-lab` systemd service.
+5. Verifies that the service is running.
+6. Prints a success message when the deployment completes.
+
+Make the script executable:
+
+`chmod +x ~/cloud-deployment-lab/deploy.sh`
+
+Run the deployment script with:
+
+`~/cloud-deployment-lab/deploy.sh`
+
+The deployment completed successfully and `npm ci` reported zero vulnerabilities.
