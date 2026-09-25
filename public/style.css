@@ -18,17 +18,51 @@ body {
   
   /* Place the site navigation at the top of every page. */
   .site-nav {
-    /* Center the home link horizontally. */
-    display: flex;
+    /* Use three columns so the logo stays centered. */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
 
-    /* Keep the logo in the middle of the bar. */
-    justify-content: center;
+    /* Align the logo and the cooks drawing on one line. */
+    align-items: center;
 
-    /* Add space around the logo. */
-    padding: 12px 20px;
+    /* Keep a small space inside the bar. */
+    padding: 10px 16px;
 
     /* Separate the bar from the page content. */
     border-bottom: 1px solid #eeeeee;
+  }
+
+  /* Keep the logo in the middle column. */
+  .site-nav-home {
+    /* Place the logo in the center column. */
+    grid-column: 2;
+  }
+
+  /* Keep the cooks link on the right side of the bar. */
+  .site-nav-cooks {
+    /* Place the link in the right column. */
+    grid-column: 3;
+
+    /* Push the drawing to the right edge. */
+    justify-self: end;
+  }
+
+  /* Show the cooks drawing inside the bar. */
+  .site-nav-cooks-image {
+    /* Show the drawing as a block inside the link. */
+    display: block;
+
+    /* Match the logo height so the drawing stays inside the bar. */
+    height: 72px;
+
+    /* Keep the original image proportions. */
+    width: auto;
+  }
+
+  /* Do not underline the cooks drawing when the mouse is over it. */
+  .site-nav-cooks:hover {
+    /* Keep the image link without an underline. */
+    text-decoration: none;
   }
 
   /* Keep the navigation logo small. */
@@ -44,7 +78,7 @@ body {
   }
 
   /* Do not underline the logo when the mouse is over it. */
-  .site-nav a:hover {
+  .site-nav-home:hover {
     /* Keep the logo link without an underline. */
     text-decoration: none;
   }

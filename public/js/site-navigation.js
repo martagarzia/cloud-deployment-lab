@@ -23,6 +23,52 @@ const siteNavigation = {
   },
 
   /**
+   * Creates the home link with the site logo.
+   * @param {string} basePath The path prefix for the current page.
+   * @returns {HTMLElement} The home link.
+   */
+  createHomeLink: function (basePath)
+  {
+    let homeLinkElement;
+    let logoElement;
+
+    homeLinkElement = document.createElement("a");
+    logoElement = document.createElement("img");
+
+    homeLinkElement.className = "site-nav-home";
+    homeLinkElement.href = basePath + "index.html";
+    logoElement.className = "site-logo";
+    logoElement.src = basePath + "images/Le_mie_ricette.jpg";
+    logoElement.alt = "Le mie ricette";
+    homeLinkElement.appendChild(logoElement);
+
+    return (homeLinkElement);
+  },
+
+  /**
+   * Creates the link to the cooks page.
+   * @param {string} basePath The path prefix for the current page.
+   * @returns {HTMLElement} The cooks link.
+   */
+  createCooksLink: function (basePath)
+  {
+    let cooksLinkElement;
+    let imageElement;
+
+    cooksLinkElement = document.createElement("a");
+    imageElement = document.createElement("img");
+
+    cooksLinkElement.className = "site-nav-cooks";
+    cooksLinkElement.href = basePath + "cuochi.html";
+    imageElement.className = "site-nav-cooks-image";
+    imageElement.src = basePath + "images/cuochi.jpg";
+    imageElement.alt = "Cuochi";
+    cooksLinkElement.appendChild(imageElement);
+
+    return (cooksLinkElement);
+  },
+
+  /**
    * Creates the navigation bar element.
    * @returns {HTMLElement} The navigation element.
    */
@@ -31,20 +77,16 @@ const siteNavigation = {
     let basePath;
     let navigationElement;
     let homeLinkElement;
-    let logoElement;
+    let cooksLinkElement;
 
     basePath = this.resolveBasePath();
     navigationElement = document.createElement("nav");
-    homeLinkElement = document.createElement("a");
-    logoElement = document.createElement("img");
+    homeLinkElement = this.createHomeLink(basePath);
+    cooksLinkElement = this.createCooksLink(basePath);
 
     navigationElement.className = "site-nav";
-    homeLinkElement.href = basePath + "index.html";
-    logoElement.className = "site-logo";
-    logoElement.src = basePath + "images/Le_mie_ricette.jpg";
-    logoElement.alt = "Le mie ricette";
-    homeLinkElement.appendChild(logoElement);
     navigationElement.appendChild(homeLinkElement);
+    navigationElement.appendChild(cooksLinkElement);
 
     return (navigationElement);
   },
