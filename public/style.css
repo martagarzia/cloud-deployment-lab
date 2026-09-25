@@ -9,8 +9,8 @@ body {
     /* Use a white background. */
     background-color: white;
   
-    /* Use black text. */
-    color: black;
+    /* Use a warm dark brown for all text. */
+    color: #3a2a22;
   
     /* Remove the default browser margin. */
     margin: 0;
@@ -96,8 +96,8 @@ body {
   
   /* Style the recipe links. */
   a {
-    /* Use black text for the links. */
-    color: black;
+    /* Use the same warm dark brown for the links. */
+    color: #3a2a22;
   
     /* Remove the default underline. */
     text-decoration: none;
@@ -110,4 +110,111 @@ body {
   a:hover {
     /* Show an underline on hover. */
     text-decoration: underline;
+  }
+
+  /* Frame the reusable tip at the bottom of a recipe page. */
+  .mamma-consiglia {
+    /* Draw a dark brown outline around the tip. */
+    border: 2px solid #3a2a22;
+
+    /* Round the corners of the outline. */
+    border-radius: 16px;
+
+    /* Keep the text inside the outline. */
+    padding: 16px 20px;
+
+    /* Separate the tip from the recipe text above it. */
+    margin-top: 32px;
+
+    /* Separate the tip from the link below it. */
+    margin-bottom: 32px;
+  }
+
+  /* Place Mamma's avatar to the left of the tip title. */
+  .mamma-consiglia-title {
+    /* Align the avatar and the title on one row. */
+    display: flex;
+
+    /* Center the title with the avatar. */
+    align-items: center;
+
+    /* Add space between the avatar and the title. */
+    gap: 12px;
+
+    /* Separate the title row from the tip text. */
+    margin-bottom: 12px;
+  }
+
+  /* Show Mamma's portrait as a small circle. */
+  .mamma-consiglia-avatar {
+    /* Use a small size next to the title. */
+    width: 48px;
+    height: 48px;
+
+    /* Crop the photo into a circle. */
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* Keep the tip title close to the top of the frame. */
+  .mamma-consiglia h2 {
+    /* Remove the extra space around the title. */
+    margin: 0;
+  }
+
+  /* Keep the tip text close to the bottom of the frame. */
+  .mamma-consiglia p {
+    /* Remove the extra space below the text. */
+    margin-bottom: 0;
+  }
+
+  /* Place the cook cards side by side when there is room. */
+  .cook-list {
+    /* Use a flexible row for the cards. */
+    display: flex;
+
+    /* Allow the cards to wrap on a narrow screen. */
+    flex-wrap: wrap;
+
+    /* Add space between the cards. */
+    gap: 24px;
+  }
+
+  /* Frame one cook profile. */
+  .cook-card {
+    /* Draw a dark brown outline around the card. */
+    border: 2px solid #3a2a22;
+
+    /* Round the corners of the outline. */
+    border-radius: 16px;
+
+    /* Keep the portrait and the name inside the card. */
+    padding: 20px;
+
+    /* Center the portrait and the name. */
+    text-align: center;
+
+    /* Give each card the same width. */
+    width: 220px;
+  }
+
+  /* Show the cook portrait as a circle. */
+  .cook-avatar {
+    /* Use a fixed size for every portrait. */
+    width: 140px;
+    height: 140px;
+
+    /* Crop the photo into a circle. */
+    border-radius: 50%;
+    object-fit: cover;
+
+    /* Center the portrait above the name. */
+    display: block;
+    margin: 0 auto 12px;
+  }
+
+  /* Keep the cook name close to the portrait. */
+  .cook-card h2 {
+    /* Remove the extra space around the name. */
+    margin: 0;
   }
