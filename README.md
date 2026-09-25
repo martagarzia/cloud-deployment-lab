@@ -2,6 +2,8 @@
 
 A hands-on project focused on building, deploying, and managing a Node.js web application on an Ubuntu VPS.
 
+A live deployment is available at `https://lemiericette.de`.
+
 ## Project Overview
 
 The project consists of a Node.js and Express application with a SQLite database.
@@ -24,6 +26,10 @@ The production environment uses systemd to manage the application process, Nginx
 - Let's Encrypt
 - UFW
 - Cron
+
+## Architecture
+
+Windows development → Git/GitHub → Ubuntu VPS → systemd → Node.js/Express → Nginx → HTTPS → SQLite
 
 ## Application Features
 

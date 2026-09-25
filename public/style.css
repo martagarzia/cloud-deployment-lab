@@ -1,7 +1,10 @@
+/* Load the Roboto font for the whole site. */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
 /* Define the basic style for the whole page. */
 body {
-    /* Use a simple sans-serif font. */
-    font-family: Arial, sans-serif;
+    /* Use Roboto for all text. */
+    font-family: "Roboto", sans-serif;
   
     /* Use a white background. */
     background-color: white;
@@ -13,13 +16,46 @@ body {
     margin: 0;
   }
   
+  /* Place the site navigation at the top of every page. */
+  .site-nav {
+    /* Center the home link horizontally. */
+    display: flex;
+
+    /* Keep the logo in the middle of the bar. */
+    justify-content: center;
+
+    /* Add space around the logo. */
+    padding: 12px 20px;
+
+    /* Separate the bar from the page content. */
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  /* Keep the navigation logo small. */
+  .site-logo {
+    /* Show the logo as a block inside the link. */
+    display: block;
+
+    /* Use a small width for the handwritten title. */
+    width: 140px;
+
+    /* Keep the original image proportions. */
+    height: auto;
+  }
+
+  /* Do not underline the logo when the mouse is over it. */
+  .site-nav a:hover {
+    /* Keep the logo link without an underline. */
+    text-decoration: none;
+  }
+
   /* Style the main content area. */
   main {
     /* Limit the width of the content. */
     max-width: 600px;
   
     /* Center the content horizontally. */
-    margin: 80px auto;
+    margin: 32px auto;
   
     /* Add space inside the content area. */
     padding: 20px;
@@ -29,6 +65,18 @@ body {
   h1 {
     /* Add space below the title. */
     margin-bottom: 40px;
+  }
+
+  /* Show the homepage title image at the top of the content. */
+  .home-banner {
+    /* Keep the image inside the content width. */
+    display: block;
+
+    /* Use the full width of the content area. */
+    width: 100%;
+
+    /* Keep the original image proportions. */
+    height: auto;
   }
   
   /* Remove the default list indentation. */
