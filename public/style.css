@@ -14,6 +14,11 @@ body {
   
     /* Remove the default browser margin. */
     margin: 0;
+
+    /* Keep the footer at the bottom of a short page. */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
   
   /* Place the site navigation at the top of every page. */
@@ -93,6 +98,12 @@ body {
   
     /* Add space inside the content area. */
     padding: 20px;
+
+    /* Let the content fill the space above the footer. */
+    flex: 1 0 auto;
+
+    /* Keep the side padding inside the page width. */
+    box-sizing: border-box;
   }
   
   /* Style the main title. */
@@ -147,7 +158,8 @@ body {
   }
 
   /* Frame the reusable tip at the bottom of a recipe page. */
-  .mamma-consiglia {
+  .mamma-consiglia,
+  .papa-consiglia {
     /* Draw a dark brown outline around the tip. */
     border: 2px solid #3a2a22;
 
@@ -164,8 +176,9 @@ body {
     margin-bottom: 32px;
   }
 
-  /* Place Mamma's avatar to the left of the tip title. */
-  .mamma-consiglia-title {
+  /* Place the cook avatar to the left of the tip title. */
+  .mamma-consiglia-title,
+  .papa-consiglia-title {
     /* Align the avatar and the title on one row. */
     display: flex;
 
@@ -179,8 +192,9 @@ body {
     margin-bottom: 12px;
   }
 
-  /* Show Mamma's portrait as a small circle. */
-  .mamma-consiglia-avatar {
+  /* Show the cook portrait as a small circle. */
+  .mamma-consiglia-avatar,
+  .papa-consiglia-avatar {
     /* Use a small size next to the title. */
     width: 48px;
     height: 48px;
@@ -191,13 +205,15 @@ body {
   }
 
   /* Keep the tip title close to the top of the frame. */
-  .mamma-consiglia h2 {
+  .mamma-consiglia h2,
+  .papa-consiglia h2 {
     /* Remove the extra space around the title. */
     margin: 0;
   }
 
   /* Keep the tip text close to the bottom of the frame. */
-  .mamma-consiglia p {
+  .mamma-consiglia p,
+  .papa-consiglia p {
     /* Remove the extra space below the text. */
     margin-bottom: 0;
   }
@@ -251,4 +267,218 @@ body {
   .cook-card h2 {
     /* Remove the extra space around the name. */
     margin: 0;
+  }
+
+  /* Place the cook filters on one row. */
+  .recipe-filter {
+    /* Align the two tags side by side. */
+    display: flex;
+
+    /* Add space between the tags. */
+    gap: 8px;
+
+    /* Separate the filters from the recipe list. */
+    margin-bottom: 32px;
+  }
+
+  /* Draw each filter as a small rounded tag. */
+  .cook-filter {
+    /* Use a pill shape. */
+    border-radius: 999px;
+
+    /* Keep the label compact. */
+    padding: 6px 14px;
+
+    /* Match the site font. */
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+
+    /* Keep the tag on a white background until it is chosen. */
+    background-color: white;
+
+    /* Show that the tag can be clicked. */
+    cursor: pointer;
+  }
+
+  /* Use a wisteria color for Mamma's tag. */
+  .cook-tag-mamma {
+    /* Color the tag text. */
+    color: #a56cb8;
+  }
+
+  /* Use an orange color for Papa's tag. */
+  .cook-tag-papa {
+    /* Color the tag text. */
+    color: #e87820;
+  }
+
+  /* Outline Mamma's filter with the same wisteria color. */
+  .cook-filter.cook-tag-mamma {
+    /* Draw a thin matching outline. */
+    border: 1.5px solid #a56cb8;
+  }
+
+  /* Outline Papa's filter with the same orange color. */
+  .cook-filter.cook-tag-papa {
+    /* Draw a thin matching outline. */
+    border: 1.5px solid #e87820;
+  }
+
+  /* Fill Mamma's filter when it is the active choice. */
+  .cook-filter.is-selected.cook-tag-mamma {
+    /* Use a solid wisteria background. */
+    background-color: #a56cb8;
+
+    /* Keep the label readable on the filled tag. */
+    color: white;
+  }
+
+  /* Fill Papa's filter when it is the active choice. */
+  .cook-filter.is-selected.cook-tag-papa {
+    /* Use a solid orange background. */
+    background-color: #e87820;
+
+    /* Keep the label readable on the filled tag. */
+    color: white;
+  }
+
+  /* Hide a recipe that does not match the active filter. */
+  .recipe-item.is-hidden {
+    /* Remove the recipe from the list. */
+    display: none;
+  }
+
+  /* Let the homepage list reach the right edge of the screen. */
+  main.home-page {
+    /* Use the full width instead of the narrow recipe column. */
+    max-width: none;
+
+    /* Keep the names and the tags away from the screen edges. */
+    padding-left: clamp(48px, 8vw, 120px);
+    padding-right: clamp(48px, 8vw, 120px);
+  }
+
+  /* Let a long recipe name wrap before it pushes the tag off screen. */
+  .recipe-item a {
+    /* Allow the link to shrink inside the row. */
+    min-width: 0;
+  }
+
+  /* Place the recipe name and its tag on one row. */
+  .recipe-item {
+    /* Align the name and the tag. */
+    display: flex;
+    align-items: center;
+
+    /* Keep a clear gap between the name and the tag. */
+    gap: 48px;
+  }
+
+  /* Keep the homepage tag smaller than the recipe title. */
+  .recipe-item-tag {
+    /* Push every tag to the right edge. */
+    margin-left: auto;
+
+    /* Keep the tag on one line. */
+    flex-shrink: 0;
+
+    /* Use a compact size next to the link. */
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  /* Place a quiet footer under every page. */
+  .site-footer {
+    /* Keep the footer padding inside the page width. */
+    box-sizing: border-box;
+
+    /* Separate the footer from the page content. */
+    border-top: 1px solid #eeeeee;
+
+    /* Keep the text away from the screen edges. */
+    padding: 28px 48px 32px;
+
+    /* Center the few lines of the footer. */
+    text-align: center;
+  }
+
+  /* Keep the copyright line compact. */
+  .site-footer-notice {
+    /* Remove the extra space around the line. */
+    margin: 0 0 12px;
+
+    /* Use a quiet size. */
+    font-size: 15px;
+  }
+
+  /* Place the question and the portrait icon on one row. */
+  .site-footer-credit {
+    /* Align the sentence and the icon. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Add space between the sentence and the icon. */
+    gap: 12px;
+
+    /* Remove the extra space around the line. */
+    margin: 0;
+
+    /* Match the copyright size. */
+    font-size: 15px;
+  }
+
+  /* Keep the icon link free of the text underline. */
+  .site-footer-avatar-link:hover {
+    /* Leave the portrait without an underline. */
+    text-decoration: none;
+  }
+
+  /* Show Marta as a small round icon. */
+  .site-footer-avatar {
+    /* Show the portrait as a block inside the link. */
+    display: block;
+
+    /* Use a small size in the footer. */
+    width: 52px;
+    height: 52px;
+
+    /* Crop the drawing into a circle. */
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 18%;
+  }
+
+  /* Show Marta's drawing above her name. */
+  .about-portrait {
+    /* Center the drawing. */
+    display: block;
+    margin: 0 auto 8px;
+
+    /* Keep the whole drawing visible. */
+    width: 220px;
+    height: auto;
+  }
+
+  /* Keep the technology lines closer than the recipe list. */
+  .about-tech li {
+    /* Use a short gap between technologies. */
+    margin-bottom: 8px;
+
+    /* Keep the list easy to read. */
+    font-size: 16px;
+  }
+
+  /* Show the cook tag above the recipe title. */
+  .recipe-cook-tag {
+    /* Place the tag on its own line. */
+    display: inline-block;
+
+    /* Separate the tag from the picture above it. */
+    margin: 20px 0 0;
+
+    /* Keep the tag easy to read. */
+    font-size: 16px;
+    font-weight: 700;
   }
