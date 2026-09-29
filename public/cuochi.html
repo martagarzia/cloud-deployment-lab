@@ -27,6 +27,8 @@
   <meta name="twitter:description" content="I cuochi di Le mie ricette.">
   <meta name="twitter:image" content="https://lemiericette.de/images/share/cuochi.jpg">
 
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
   <!-- Load the CSS stylesheet. -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -40,20 +42,24 @@
     <!-- List the cooks of the site. -->
     <ul class="cook-list">
       <!-- Card for Mamma, with her profile photo. -->
-      <li class="cook-card">
-        <img class="cook-avatar" src="images/mamma.jpg" alt="Mamma">
-        <h2>Mamma</h2>
+      <li>
+        <a class="cook-card" href="index.html?cuoco=mamma">
+          <img class="cook-avatar" src="images/mamma.jpg" alt="" width="1024" height="878">
+          <h2>Mamma</h2>
+        </a>
       </li>
 
       <!-- Card for Papa, with his profile photo. -->
-      <li class="cook-card">
-        <img class="cook-avatar" src="images/papa.jpg" alt="Papà">
-        <h2>Papà</h2>
+      <li>
+        <a class="cook-card" href="index.html?cuoco=papa">
+          <img class="cook-avatar" src="images/papa.jpg" alt="" width="1024" height="878">
+          <h2>Papà</h2>
+        </a>
       </li>
     </ul>
 
     <!-- Link back to the recipe list. -->
-    <a href="index.html">← Torna alle ricette</a>
+    <a class="back-link" href="index.html">← Torna alle ricette</a>
   </main>
 
   <!-- Load the reusable site navigation. -->

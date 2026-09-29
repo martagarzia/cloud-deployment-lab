@@ -9,6 +9,9 @@
 // Import the Express framework so that we can use its tools to create a web server.
 const express = require("express");
 
+// Import the path module so that the 404 page can be sent from an absolute path.
+const path = require("path");
+
 // Import the SQLite database connection.
 const db = require("../data/database");
 
@@ -150,6 +153,12 @@ app.delete("/tasks/:id", (req, res) => {
 
   // Return a confirmation message as a JSON response.
   res.json({ message: "Task deleted successfully" });
+});
+
+// Send the site 404 page when no static file and no route matched the address.
+app.use((req, res) => {
+  // Return the styled page instead of the default server error.
+  res.status(404).sendFile(path.join(__dirname, "../public/404.html"));
 });
 
 // Start the web server and make it listen for incoming HTTP requests on port 3000.

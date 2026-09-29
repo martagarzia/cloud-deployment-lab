@@ -112,8 +112,8 @@ body {
     margin-bottom: 40px;
   }
 
-  /* Show the homepage title image at the top of the content. */
-  .home-banner {
+  /* Show the recipe photo at the top of a recipe page. */
+  .recipe-photo {
     /* Keep the image inside the content width. */
     display: block;
 
@@ -155,6 +155,16 @@ body {
   a:hover {
     /* Show an underline on hover. */
     text-decoration: underline;
+  }
+
+  /* Show a clear outline when a link or a button has keyboard focus. */
+  a:focus-visible,
+  button:focus-visible {
+    /* Draw a dark brown ring around the focused control. */
+    outline: 2px solid #3a2a22;
+
+    /* Keep the ring a little away from the control. */
+    outline-offset: 3px;
   }
 
   /* Frame the reusable tip at the bottom of a recipe page. */
@@ -232,6 +242,15 @@ body {
 
   /* Frame one cook profile. */
   .cook-card {
+    /* Keep the card a block so its width applies to the link. */
+    display: block;
+
+    /* Use the page text color inside the link. */
+    color: inherit;
+
+    /* Do not enlarge the name through the link style. */
+    font-size: inherit;
+
     /* Draw a dark brown outline around the card. */
     border: 2px solid #3a2a22;
 
@@ -269,6 +288,12 @@ body {
     margin: 0;
   }
 
+  /* Leave the cook card without an underline. */
+  a.cook-card:hover {
+    /* Keep the name and the portrait as a plain card. */
+    text-decoration: none;
+  }
+
   /* Place the cook filters on one row. */
   .recipe-filter {
     /* Align the two tags side by side. */
@@ -301,34 +326,37 @@ body {
     cursor: pointer;
   }
 
-  /* Use a wisteria color for Mamma's tag. */
+  /* Use a dark wisteria color for Mamma's tag. */
   .cook-tag-mamma {
-    /* Color the tag text. */
-    color: #a56cb8;
+    /* Color the tag text so it stays readable on white. */
+    color: #6b3a78;
   }
 
-  /* Use an orange color for Papa's tag. */
+  /* Use a dark orange color for Papa's tag. */
   .cook-tag-papa {
-    /* Color the tag text. */
-    color: #e87820;
+    /* Color the tag text so it stays readable on white. */
+    color: #8a3e00;
   }
 
   /* Outline Mamma's filter with the same wisteria color. */
   .cook-filter.cook-tag-mamma {
     /* Draw a thin matching outline. */
-    border: 1.5px solid #a56cb8;
+    border: 1.5px solid #6b3a78;
   }
 
   /* Outline Papa's filter with the same orange color. */
   .cook-filter.cook-tag-papa {
     /* Draw a thin matching outline. */
-    border: 1.5px solid #e87820;
+    border: 1.5px solid #8a3e00;
   }
 
   /* Fill Mamma's filter when it is the active choice. */
   .cook-filter.is-selected.cook-tag-mamma {
-    /* Use a solid wisteria background. */
-    background-color: #a56cb8;
+    /* Use a lighter wisteria background. */
+    background-color: #8d5a9e;
+
+    /* Match the outline to the filled tag. */
+    border-color: #8d5a9e;
 
     /* Keep the label readable on the filled tag. */
     color: white;
@@ -336,8 +364,11 @@ body {
 
   /* Fill Papa's filter when it is the active choice. */
   .cook-filter.is-selected.cook-tag-papa {
-    /* Use a solid orange background. */
-    background-color: #e87820;
+    /* Use a lighter orange background. */
+    background-color: #b85c10;
+
+    /* Match the outline to the filled tag. */
+    border-color: #b85c10;
 
     /* Keep the label readable on the filled tag. */
     color: white;
@@ -477,8 +508,73 @@ body {
 
     /* Separate the tag from the picture above it. */
     margin: 20px 0 0;
+  }
 
-    /* Keep the tag easy to read. */
+  /* Keep the cook tag smaller than the recipe title. */
+  .recipe-cook-tag a {
+    /* Use a compact size above the title. */
     font-size: 16px;
     font-weight: 700;
+  }
+
+  /* Number the preparation steps. */
+  .recipe-steps {
+    /* Leave room for the step numbers. */
+    padding-left: 1.4em;
+
+    /* Remove the extra space above the first step. */
+    margin-top: 0;
+  }
+
+  /* Stack the list and keep the cards inside a narrow screen. */
+  @media (max-width: 480px) {
+    /* Keep the homepage names away from the screen edges. */
+    main.home-page {
+      /* Use a short side padding on a phone. */
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    /* Place the cook tag under the recipe name. */
+    .recipe-item {
+      /* Stack the name and the tag. */
+      flex-direction: column;
+      align-items: flex-start;
+
+      /* Use a short gap between the name and the tag. */
+      gap: 8px;
+    }
+
+    /* Keep the tag under the name, on the left. */
+    .recipe-item-tag {
+      /* Do not push the tag to the right edge. */
+      margin-left: 0;
+    }
+
+    /* Give the filter a taller touch target. */
+    .cook-filter {
+      /* Raise the clickable area above a thin text line. */
+      padding: 12px 16px;
+    }
+
+    /* Let each cook card use the full content width. */
+    .cook-list > li {
+      /* Stretch the card row to the content width. */
+      width: 100%;
+    }
+
+    /* Keep the card padding inside the screen. */
+    .cook-card {
+      /* Use the full width of the row. */
+      width: 100%;
+
+      /* Include the padding in that width. */
+      box-sizing: border-box;
+    }
+
+    /* Keep the footer text away from the screen edges. */
+    .site-footer {
+      /* Use a shorter side padding on a phone. */
+      padding: 24px 20px 28px;
+    }
   }

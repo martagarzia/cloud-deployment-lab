@@ -42,6 +42,9 @@ const papaConsiglia = {
     titleRowElement.className = "papa-consiglia-title";
     avatarElement.className = "papa-consiglia-avatar";
     avatarElement.src = "/images/papa.jpg";
+    avatarElement.width = 1024;
+    avatarElement.height = 878;
+    avatarElement.loading = "lazy";
     avatarElement.alt = "Papà";
     titleElement.textContent = "Papà consiglia";
     titleRowElement.appendChild(avatarElement);
@@ -83,7 +86,7 @@ const papaConsiglia = {
   {
     let backLinkElement;
 
-    backLinkElement = mainElement.querySelector("a");
+    backLinkElement = mainElement.querySelector(".back-link");
 
     if (backLinkElement != null)
     {

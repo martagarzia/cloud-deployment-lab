@@ -42,6 +42,9 @@ const mammaConsiglia = {
     titleRowElement.className = "mamma-consiglia-title";
     avatarElement.className = "mamma-consiglia-avatar";
     avatarElement.src = "/images/mamma.jpg";
+    avatarElement.width = 1024;
+    avatarElement.height = 878;
+    avatarElement.loading = "lazy";
     avatarElement.alt = "Mamma";
     titleElement.textContent = "Mamma consiglia";
     titleRowElement.appendChild(avatarElement);
@@ -83,7 +86,7 @@ const mammaConsiglia = {
   {
     let backLinkElement;
 
-    backLinkElement = mainElement.querySelector("a");
+    backLinkElement = mainElement.querySelector(".back-link");
 
     if (backLinkElement != null)
     {

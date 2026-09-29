@@ -1,5 +1,6 @@
 /**
  * Filters the homepage recipe list by cook.
+ * The active cook is kept in the cuoco query parameter.
  */
 const recipeFilter = {
   /**
@@ -19,6 +20,95 @@ const recipeFilter = {
     }
 
     return (cookName);
+  },
+
+  /**
+   * Reads the cook name stored in the page address.
+   * @returns {string} The cook name, or an empty string when it is missing.
+   */
+  readCookFromUrl: function ()
+  {
+    let params;
+    let cookName;
+
+    params = new URLSearchParams(window.location.search);
+    cookName = "";
+
+    if (params.get("cuoco") != null)
+    {
+      cookName = params.get("cuoco");
+    }
+
+    return (cookName);
+  },
+
+  /**
+   * Checks whether the cook name is one of the site cooks.
+   * @param {string} cookName The cook name from the address or a button.
+   * @returns {boolean} True when the name is mamma or papa.
+   */
+  isKnownCook: function (cookName)
+  {
+    let isKnown;
+
+    isKnown = false;
+
+    if (cookName == "mamma")
+    {
+      isKnown = true;
+    }
+
+    if (cookName == "papa")
+    {
+      isKnown = true;
+    }
+
+    return (isKnown);
+  },
+
+  /**
+   * Returns the cook that should filter the list.
+   * @returns {string} A known cook, or an empty string to show every recipe.
+   */
+  readActiveCook: function ()
+  {
+    let cookName;
+
+    cookName = this.readCookFromUrl();
+
+    if (this.isKnownCook(cookName) == false)
+    {
+      cookName = "";
+    }
+
+    return (cookName);
+  },
+
+  /**
+   * Writes the active cook into the page address.
+   * @param {string} cookName The active cook, or an empty string.
+   * @returns {void}
+   */
+  writeCookToUrl: function (cookName)
+  {
+    let pageUrl;
+    let nextPath;
+
+    pageUrl = new URL(window.location.href);
+    nextPath = "";
+
+    if (cookName != "")
+    {
+      pageUrl.searchParams.set("cuoco", cookName);
+    }
+
+    if (cookName == "")
+    {
+      pageUrl.searchParams.delete("cuoco");
+    }
+
+    nextPath = pageUrl.pathname + pageUrl.search;
+    window.history.pushState({ cook: cookName }, "", nextPath);
   },
 
   /**
@@ -152,6 +242,29 @@ const recipeFilter = {
   },
 
   /**
+   * Applies the active cook to the buttons and the recipe list.
+   * @param {string} cookName The active cook, or an empty string.
+   * @returns {void}
+   */
+  applyCook: function (cookName)
+  {
+    this.markSelectedButton(cookName);
+    this.showRecipes(cookName);
+  },
+
+  /**
+   * Applies the cook stored in the page address.
+   * @returns {void}
+   */
+  applyFromUrl: function ()
+  {
+    let cookName;
+
+    cookName = this.readActiveCook();
+    this.applyCook(cookName);
+  },
+
+  /**
    * Returns the cook to apply after a click.
    * @param {HTMLElement} buttonElement The clicked filter button.
    * @returns {string} The next cook, or an empty string to show every recipe.
@@ -182,8 +295,8 @@ const recipeFilter = {
     let nextCook;
 
     nextCook = this.resolveNextCook(buttonElement);
-    this.markSelectedButton(nextCook);
-    this.showRecipes(nextCook);
+    this.applyCook(nextCook);
+    this.writeCookToUrl(nextCook);
   },
 
   /**
@@ -225,12 +338,30 @@ const recipeFilter = {
   },
 
   /**
+   * Restores the filter when the visitor uses the browser back button.
+   * @returns {void}
+   */
+  bindPopState: function ()
+  {
+    let filter;
+
+    filter = this;
+
+    window.addEventListener("popstate", function ()
+    {
+      filter.applyFromUrl();
+    });
+  },
+
+  /**
    * Starts the homepage filter.
    * @returns {void}
    */
   insert: function ()
   {
+    this.applyFromUrl();
     this.bindEvents();
+    this.bindPopState();
   }
 };
 

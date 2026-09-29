@@ -27,6 +27,8 @@
   <meta name="twitter:description" content="Le ricette di casa.">
   <meta name="twitter:image" content="https://lemiericette.de/images/share/homepage.jpg">
 
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
   <!-- Load the CSS stylesheet. -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -35,7 +37,7 @@
   <!-- Create the main content of the page. -->
   <main class="home-page">
     <!-- Choose whose recipes to show. -->
-    <div class="recipe-filter">
+    <div class="recipe-filter" role="group" aria-label="Filtra per cuoco">
       <button type="button" class="cook-filter cook-tag-mamma" data-cook="mamma" aria-pressed="false">#mamma</button>
       <button type="button" class="cook-filter cook-tag-papa" data-cook="papa" aria-pressed="false">#papa</button>
     </div>
@@ -43,28 +45,28 @@
     <!-- Create the list of recipe links. -->
     <ul class="recipe-list">
       <!-- Link to the carbonara recipe page. -->
-      <li class="recipe-item" data-cook="mamma"><a href="ricette/carbonara.html">Carbonara</a><span class="recipe-item-tag cook-tag-mamma">#mamma</span></li>
+      <li class="recipe-item" data-cook="mamma"><a href="ricette/carbonara.html">Carbonara</a><a class="recipe-item-tag cook-tag-mamma" href="index.html?cuoco=mamma">#mamma</a></li>
 
       <!-- Link to the tortellini recipe page. -->
-      <li class="recipe-item" data-cook="mamma"><a href="ricette/tortellini.html">Tortellini in brodo</a><span class="recipe-item-tag cook-tag-mamma">#mamma</span></li>
+      <li class="recipe-item" data-cook="mamma"><a href="ricette/tortellini.html">Tortellini in brodo</a><a class="recipe-item-tag cook-tag-mamma" href="index.html?cuoco=mamma">#mamma</a></li>
 
       <!-- Link to the orange jam recipe page. -->
-      <li class="recipe-item" data-cook="mamma"><a href="ricette/marmellata-arance.html">Marmellata di arance</a><span class="recipe-item-tag cook-tag-mamma">#mamma</span></li>
+      <li class="recipe-item" data-cook="mamma"><a href="ricette/marmellata-arance.html">Marmellata di arance</a><a class="recipe-item-tag cook-tag-mamma" href="index.html?cuoco=mamma">#mamma</a></li>
 
       <!-- Link to the grape jam recipe page. -->
-      <li class="recipe-item" data-cook="mamma"><a href="ricette/marmellata-uva-nera.html">Marmellata di uva nera</a><span class="recipe-item-tag cook-tag-mamma">#mamma</span></li>
+      <li class="recipe-item" data-cook="mamma"><a href="ricette/marmellata-uva-nera.html">Marmellata di uva nera</a><a class="recipe-item-tag cook-tag-mamma" href="index.html?cuoco=mamma">#mamma</a></li>
 
       <!-- Link to the pizzaiola recipe page. -->
-      <li class="recipe-item" data-cook="papa"><a href="ricette/fettina-carne-pizzaiola.html">Fettina di carne alla pizzaiola</a><span class="recipe-item-tag cook-tag-papa">#papa</span></li>
+      <li class="recipe-item" data-cook="papa"><a href="ricette/fettina-carne-pizzaiola.html">Fettina di carne alla pizzaiola</a><a class="recipe-item-tag cook-tag-papa" href="index.html?cuoco=papa">#papa</a></li>
 
       <!-- Link to the fish-roe pâté recipe page. -->
-      <li class="recipe-item" data-cook="papa"><a href="ricette/pate-uova-pesce.html">Paté con uova di pesce</a><span class="recipe-item-tag cook-tag-papa">#papa</span></li>
+      <li class="recipe-item" data-cook="papa"><a href="ricette/pate-uova-pesce.html">Paté con uova di pesce</a><a class="recipe-item-tag cook-tag-papa" href="index.html?cuoco=papa">#papa</a></li>
 
       <!-- Link to the pumpkin mostarda recipe page. -->
-      <li class="recipe-item" data-cook="mamma"><a href="ricette/mostarda-zucca.html">Mostarda di zucca</a><span class="recipe-item-tag cook-tag-mamma">#mamma</span></li>
+      <li class="recipe-item" data-cook="mamma"><a href="ricette/mostarda-zucca.html">Mostarda di zucca</a><a class="recipe-item-tag cook-tag-mamma" href="index.html?cuoco=mamma">#mamma</a></li>
 
       <!-- Link to the mushroom and chestnut soup recipe page. -->
-      <li class="recipe-item" data-cook="mamma"><a href="ricette/zuppa-funghi-castagne.html">Zuppa di funghi e castagne</a><span class="recipe-item-tag cook-tag-mamma">#mamma</span></li>
+      <li class="recipe-item" data-cook="mamma"><a href="ricette/zuppa-funghi-castagne.html">Zuppa di funghi e castagne</a><a class="recipe-item-tag cook-tag-mamma" href="index.html?cuoco=mamma">#mamma</a></li>
     </ul>
   </main>
 

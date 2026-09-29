@@ -4,22 +4,36 @@
 const siteFooter = {
   /**
    * Returns the path prefix for the current page.
-   * @returns {string} An empty string on a root page, or "../" on a recipe page.
+   * Root-absolute paths keep the footer working on the 404 page too.
+   * @returns {string} A slash, so every link starts from the site root.
    */
   resolveBasePath: function ()
   {
-    let pagePath;
     let basePath;
 
-    pagePath = window.location.pathname;
-    basePath = "";
-
-    if (pagePath.indexOf("/ricette/") !== -1)
-    {
-      basePath = "../";
-    }
+    basePath = "/";
 
     return (basePath);
+  },
+
+  /**
+   * Checks whether the current page is Marta's page.
+   * @returns {boolean} True on the page about Marta.
+   */
+  isMartaPage: function ()
+  {
+    let pagePath;
+    let isMarta;
+
+    pagePath = window.location.pathname;
+    isMarta = false;
+
+    if (pagePath.indexOf("marta.html") !== -1)
+    {
+      isMarta = true;
+    }
+
+    return (isMarta);
   },
 
   /**
@@ -39,6 +53,9 @@ const siteFooter = {
     creditLinkElement.href = basePath + "marta.html";
     imageElement.className = "site-footer-avatar";
     imageElement.src = basePath + "images/marta.jpg";
+    imageElement.width = 1024;
+    imageElement.height = 878;
+    imageElement.loading = "lazy";
     imageElement.alt = "Marta";
     creditLinkElement.appendChild(imageElement);
 
@@ -85,24 +102,43 @@ const siteFooter = {
   },
 
   /**
+   * Adds the credit line on every page except Marta's page.
+   * @param {HTMLElement} footerElement The footer element.
+   * @param {boolean} isMartaPage True when the credit would point at the open page.
+   * @returns {void}
+   */
+  appendCredit: function (footerElement, isMartaPage)
+  {
+    let basePath;
+    let creditElement;
+
+    basePath = this.resolveBasePath();
+    creditElement = null;
+
+    if (isMartaPage == false)
+    {
+      creditElement = this.createCredit(basePath);
+      footerElement.appendChild(creditElement);
+    }
+  },
+
+  /**
    * Creates the footer element.
    * @returns {HTMLElement} The footer element.
    */
   createFooter: function ()
   {
-    let basePath;
     let footerElement;
     let noticeElement;
-    let creditElement;
+    let isMartaPage;
 
-    basePath = this.resolveBasePath();
     footerElement = document.createElement("footer");
     noticeElement = this.createNotice();
-    creditElement = this.createCredit(basePath);
+    isMartaPage = this.isMartaPage();
 
     footerElement.className = "site-footer";
     footerElement.appendChild(noticeElement);
-    footerElement.appendChild(creditElement);
+    this.appendCredit(footerElement, isMartaPage);
 
     return (footerElement);
   },

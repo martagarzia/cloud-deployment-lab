@@ -4,20 +4,14 @@
 const siteNavigation = {
   /**
    * Returns the path prefix for the current page.
-   * @returns {string} An empty string on the home page, or "../" on a recipe page.
+   * Root-absolute paths keep the bar working on the 404 page too.
+   * @returns {string} A slash, so every link starts from the site root.
    */
   resolveBasePath: function ()
   {
-    let pagePath;
     let basePath;
 
-    pagePath = window.location.pathname;
-    basePath = "";
-
-    if (pagePath.indexOf("/ricette/") !== -1)
-    {
-      basePath = "../";
-    }
+    basePath = "/";
 
     return (basePath);
   },
@@ -39,6 +33,8 @@ const siteNavigation = {
     homeLinkElement.href = basePath + "index.html";
     logoElement.className = "site-logo";
     logoElement.src = basePath + "images/Le_mie_ricette.jpg";
+    logoElement.width = 1024;
+    logoElement.height = 512;
     logoElement.alt = "Le mie ricette";
     homeLinkElement.appendChild(logoElement);
 
@@ -62,6 +58,8 @@ const siteNavigation = {
     cooksLinkElement.href = basePath + "cuochi.html";
     imageElement.className = "site-nav-cooks-image";
     imageElement.src = basePath + "images/cuochi.jpg";
+    imageElement.width = 1024;
+    imageElement.height = 1024;
     imageElement.alt = "Cuochi";
     cooksLinkElement.appendChild(imageElement);
 
