@@ -242,6 +242,55 @@ const recipeFilter = {
   },
 
   /**
+   * Counts how many recipes stay visible for the active cook.
+   * @param {string} cookName The active cook, or an empty string.
+   * @returns {number} The number of visible recipes.
+   */
+  countVisibleRecipes: function (cookName)
+  {
+    let recipeItems;
+    let itemCount;
+    let visibleCount;
+    let i;
+
+    recipeItems = document.querySelectorAll(".recipe-item");
+    itemCount = recipeItems.length;
+    visibleCount = 0;
+    i = 0;
+
+    while (i < itemCount)
+    {
+      if (this.isRecipeVisible(recipeItems[i].dataset.cook, cookName) == true)
+      {
+        visibleCount++;
+      }
+      i++;
+    }
+
+    return (visibleCount);
+  },
+
+  /**
+   * Writes the visible recipe count into the filter row.
+   * @param {string} cookName The active cook, or an empty string.
+   * @returns {void}
+   */
+  updateRecipeCount: function (cookName)
+  {
+    let countElement;
+    let visibleCount;
+
+    countElement = document.querySelector(".recipe-count");
+    visibleCount = 0;
+
+    if (countElement != null)
+    {
+      visibleCount = this.countVisibleRecipes(cookName);
+      countElement.textContent = String(visibleCount);
+    }
+  },
+
+  /**
    * Applies the active cook to the buttons and the recipe list.
    * @param {string} cookName The active cook, or an empty string.
    * @returns {void}
@@ -250,6 +299,7 @@ const recipeFilter = {
   {
     this.markSelectedButton(cookName);
     this.showRecipes(cookName);
+    this.updateRecipeCount(cookName);
   },
 
   /**

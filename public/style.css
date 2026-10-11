@@ -296,14 +296,30 @@ body {
 
   /* Place the cook filters on one row. */
   .recipe-filter {
-    /* Align the two tags side by side. */
+    /* Align the count and the tags side by side. */
     display: flex;
 
-    /* Add space between the tags. */
+    /* Keep the count level with the tags. */
+    align-items: center;
+
+    /* Add space between the count and the tags. */
     gap: 8px;
 
     /* Separate the filters from the recipe list. */
     margin-bottom: 32px;
+  }
+
+  /* Show how many recipes match the active filter. */
+  .recipe-count {
+    /* Match the tag label size. */
+    font-size: 15px;
+    font-weight: 700;
+
+    /* Match the warm dark brown used for the recipe names. */
+    color: #3a2a22;
+
+    /* Leave a little space before the first tag. */
+    margin-right: 4px;
   }
 
   /* Draw each filter as a small rounded tag. */
