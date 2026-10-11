@@ -271,7 +271,32 @@ const recipeFilter = {
   },
 
   /**
+   * Builds the phrase that names how many recipes are visible.
+   * @param {number} visibleCount The number of visible recipes.
+   * @returns {string} A phrase such as "8 ricette" or "1 ricetta".
+   */
+  formatRecipeCount: function (visibleCount)
+  {
+    let noun;
+    let label;
+
+    noun = "ricette";
+    label = "";
+
+    if (visibleCount == 1)
+    {
+      noun = "ricetta";
+    }
+
+    label = String(visibleCount) + " " + noun;
+
+    return (label);
+  },
+
+  /**
    * Writes the visible recipe count into the filter row.
+   * The live region text is the full phrase, so a screen reader
+   * announces "6 ricette" when the filter changes.
    * @param {string} cookName The active cook, or an empty string.
    * @returns {void}
    */
@@ -279,14 +304,17 @@ const recipeFilter = {
   {
     let countElement;
     let visibleCount;
+    let countLabel;
 
     countElement = document.querySelector(".recipe-count");
     visibleCount = 0;
+    countLabel = "";
 
     if (countElement != null)
     {
       visibleCount = this.countVisibleRecipes(cookName);
-      countElement.textContent = String(visibleCount);
+      countLabel = this.formatRecipeCount(visibleCount);
+      countElement.textContent = countLabel;
     }
   },
 

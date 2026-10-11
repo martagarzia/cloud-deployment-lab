@@ -112,6 +112,31 @@ body {
     margin-bottom: 40px;
   }
 
+  /* Keep text available to assistive technology without showing it. */
+  .visually-hidden {
+    /* Take the text out of the page flow. */
+    position: absolute;
+
+    /* Shrink the box to a single pixel. */
+    width: 1px;
+    height: 1px;
+
+    /* Remove the space around the text. */
+    padding: 0;
+    margin: -1px;
+
+    /* Hide anything that still sticks out of the box. */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+
+    /* Keep the words on one line so they are not clipped mid-word. */
+    white-space: nowrap;
+
+    /* Remove the border that could still be seen. */
+    border: 0;
+  }
+
   /* Show the recipe photo at the top of a recipe page. */
   .recipe-photo {
     /* Keep the image inside the content width. */
