@@ -345,6 +345,22 @@ body {
 
     /* Leave a little space before the first tag. */
     margin-right: 4px;
+
+    /* Stack the count above a hidden two-digit label. */
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Keep a one-digit count in the same space as "23 ricette". */
+  .recipe-count::before {
+    /* Reserve the width of the full list count. */
+    content: "23 ricette";
+
+    /* Keep the copy out of the row height. */
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
   }
 
   /* Draw each filter as a small rounded tag. */
@@ -417,8 +433,13 @@ body {
 
   /* Hide a recipe that does not match the active filter. */
   .recipe-item.is-hidden {
-    /* Remove the recipe from the list. */
-    display: none;
+    /* Keep the row in the layout so the list stays the same width. */
+    visibility: hidden;
+
+    /* Collapse the row so it leaves no gap. */
+    height: 0;
+    margin-bottom: 0;
+    overflow: hidden;
   }
 
   /* Let the homepage list reach the right edge of the screen. */
